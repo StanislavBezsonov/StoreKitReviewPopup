@@ -10,17 +10,15 @@ final class ReviewRequestService {
     private var usageTimer: Timer?
     private var isReviewBeingShown = false
 
-    private let userDefaults = UserDefaultsHelper.shared
-
     // MARK: - Init
     init(trackingService: SessionTrackingServiceProtocol) {
         self.trackingService = trackingService
 
-        if userDefaults.firstLaunchDate == nil {
-            userDefaults.firstLaunchDate = Date()
+        if UserDefaultsHelper.firstLaunchDate == nil {
+            UserDefaultsHelper.firstLaunchDate = Date()
         }
-        if userDefaults.lastReviewRequestDate == nil {
-            userDefaults.lastReviewRequestDate = userDefaults.firstLaunchDate
+        if UserDefaultsHelper.lastReviewRequestDate == nil {
+            UserDefaultsHelper.lastReviewRequestDate = UserDefaultsHelper.firstLaunchDate
         }
     }
 
@@ -46,7 +44,7 @@ final class ReviewRequestService {
     }
 
     func hasEnoughUsageTime(usageTime: TimeInterval) {
-        let checkpoint = userDefaults.usageCheckpoint
+        let checkpoint = UserDefaultsHelper.usageCheckpoint
         let delta = usageTime - checkpoint
         print("ReviewRequestService: прирост использования = \(Int(delta)) сек / нужно ≥ \(Int(minUsage)) сек (чекпойнт: \(Int(checkpoint)) сек, текущее: \(Int(usageTime)) сек)")
 
@@ -56,7 +54,7 @@ final class ReviewRequestService {
     }
 
     func hasEnoughCooldownPassed() {
-        let last = userDefaults.lastReviewRequestDate ?? .distantPast
+        let last = UserDefaultsHelper.lastReviewRequestDate ?? .distantPast
         let enoughTime = Date().timeIntervalSince(last) >= cooldownDays
         print("ReviewRequestService: проверка cooldown — прошло \(Int(Date().timeIntervalSince(last))) сек, требуется ≥ \(Int(cooldownDays)) сек. Пройден: \(enoughTime)")
         if enoughTime {
@@ -98,8 +96,8 @@ final class ReviewRequestService {
             self?.isReviewBeingShown = false
         }
 
-        userDefaults.lastReviewRequestDate = Date()
-        userDefaults.usageCheckpoint = trackingService.currentSessionDuration
+        UserDefaultsHelper.lastReviewRequestDate = Date()
+        UserDefaultsHelper.usageCheckpoint = trackingService.currentSessionDuration
     }
 }
 

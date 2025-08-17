@@ -8,7 +8,6 @@ protocol SessionTrackingServiceProtocol: AnyObject {
 
 final class SessionTrackingService: SessionTrackingServiceProtocol {
     private let sessionTimeout: TimeInterval = 60 * 60
-    private let userDefaults = UserDefaultsHelper.shared
 
     private var sessionStart: Date?
     private(set) var completedSessions: Int = 0
@@ -24,8 +23,8 @@ final class SessionTrackingService: SessionTrackingServiceProtocol {
     
     // MARK: - Init
     init() {
-        totalSessionsDuration = userDefaults.totalUsage
-        completedSessions = userDefaults.completedSessions
+        totalSessionsDuration = UserDefaultsHelper.totalUsage
+        completedSessions = UserDefaultsHelper.completedSessions
         startSession()
         setupNotifications()
     }
@@ -37,18 +36,18 @@ final class SessionTrackingService: SessionTrackingServiceProtocol {
             return
         }
 
-        if let lastEnd = userDefaults.lastSessionEnd {
+        if let lastEnd = UserDefaultsHelper.lastSessionEnd {
             let interval = now.timeIntervalSince(lastEnd)
             if interval > sessionTimeout {
                 completedSessions += 1
-                userDefaults.completedSessions = completedSessions
+                UserDefaultsHelper.completedSessions = completedSessions
                 print("Начата НОВАЯ сессия (timeout превышен). Всего завершённых: \(completedSessions)")
             } else {
                 print("Продолжаем прошлую сессию (timeout не превышен)")
             }
         } else {
             completedSessions += 1
-            userDefaults.completedSessions = completedSessions
+            UserDefaultsHelper.completedSessions = completedSessions
         }
 
         sessionStart = now
@@ -62,8 +61,8 @@ final class SessionTrackingService: SessionTrackingServiceProtocol {
         let duration = now.timeIntervalSince(start)
 
         totalSessionsDuration += duration
-        userDefaults.totalUsage = totalSessionsDuration
-        userDefaults.lastSessionEnd = now
+        UserDefaultsHelper.totalUsage = totalSessionsDuration
+        UserDefaultsHelper.lastSessionEnd = now
     }
 }
 
