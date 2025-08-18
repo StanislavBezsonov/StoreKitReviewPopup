@@ -30,11 +30,6 @@ final class ReviewRequestService {
         setupNotifications()
     }
 
-    func stopMonitoring() {
-        print("ReviewRequestService: остановка мониторинга")
-        stopUsageTimer()
-    }
-
     // MARK: - Conditions
     func hasEnoughSessions(completedSessions: Int) {
         print("ReviewRequestService: завершённых сессий = \(completedSessions) / нужно ≥ \(minSessions)")

@@ -25,12 +25,11 @@ final class SessionTrackingService: SessionTrackingServiceProtocol {
     init() {
         totalSessionsDuration = UserDefaultsHelper.totalUsage
         completedSessions = UserDefaultsHelper.completedSessions
-        startSession()
         setupNotifications()
     }
 
     // MARK: - Session
-    private func startSession() {
+    func startSession() {
         let now = Date()
         guard sessionStart == nil else {
             return

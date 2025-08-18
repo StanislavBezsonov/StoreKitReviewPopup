@@ -14,13 +14,7 @@ class DummyViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
 
-        interactor?.load(request: .init())
         interactor?.triggerReviewRequest()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        interactor?.stopServices()
     }
 
     func setupUI() {
