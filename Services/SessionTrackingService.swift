@@ -25,7 +25,6 @@ final class SessionTrackingService: SessionTrackingServiceProtocol {
     init() {
         totalSessionsDuration = UserDefaultsHelper.totalUsage
         completedSessions = UserDefaultsHelper.completedSessions
-        setupNotifications()
     }
 
     // MARK: - Session
@@ -50,6 +49,8 @@ final class SessionTrackingService: SessionTrackingServiceProtocol {
         }
 
         sessionStart = now
+        
+        setupNotifications()
     }
 
     private func saveCurrentSession() {
